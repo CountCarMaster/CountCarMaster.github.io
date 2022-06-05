@@ -20,13 +20,13 @@
       
         <tags>
             
-            <tag> NumPy </tag>
-            
-            <tag> Matplotlib </tag>
+            <tag> sumo </tag>
             
             <tag> Python </tag>
             
-            <tag> sumo </tag>
+            <tag> NumPy </tag>
+            
+            <tag> Matplotlib </tag>
             
             <tag> Detector </tag>
             
@@ -84,9 +84,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> TraCI </tag>
             
@@ -113,15 +113,15 @@
       
         <tags>
             
-            <tag> NumPy </tag>
-            
-            <tag> Matplotlib </tag>
-            
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
             
             <tag> xml </tag>
+            
+            <tag> Python </tag>
+            
+            <tag> NumPy </tag>
+            
+            <tag> Matplotlib </tag>
             
         </tags>
       
@@ -173,13 +173,13 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
             
             <tag> xml </tag>
             
             <tag> netconvert </tag>
+            
+            <tag> Python </tag>
             
         </tags>
       
@@ -204,11 +204,11 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
             
             <tag> xml </tag>
+            
+            <tag> Python </tag>
             
             <tag> shp </tag>
             
@@ -239,9 +239,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> xml </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml.etree.ElementTree </tag>
             
@@ -268,9 +268,9 @@
       
         <tags>
             
-            <tag> NumPy </tag>
-            
             <tag> Python </tag>
+            
+            <tag> NumPy </tag>
             
         </tags>
       
