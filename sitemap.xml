@@ -268,6 +268,13 @@
   </url>
   
   <url>
+    <loc>https://www.hanasaku.xyz/tags/Python/</loc>
+    <lastmod>2022-07-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.hanasaku.xyz/tags/sumo/</loc>
     <lastmod>2022-07-05</lastmod>
     <changefreq>weekly</changefreq>
@@ -283,13 +290,6 @@
   
   <url>
     <loc>https://www.hanasaku.xyz/tags/netconvert/</loc>
-    <lastmod>2022-07-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.hanasaku.xyz/tags/Python/</loc>
     <lastmod>2022-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

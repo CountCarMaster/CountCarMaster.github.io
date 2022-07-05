@@ -28,10 +28,10 @@ https://www.hanasaku.xyz/categories/index.html
 https://www.hanasaku.xyz/
 https://www.hanasaku.xyz/tags/NumPy/
 https://www.hanasaku.xyz/tags/Matplotlib/
+https://www.hanasaku.xyz/tags/Python/
 https://www.hanasaku.xyz/tags/sumo/
 https://www.hanasaku.xyz/tags/xml/
 https://www.hanasaku.xyz/tags/netconvert/
-https://www.hanasaku.xyz/tags/Python/
 https://www.hanasaku.xyz/tags/Detector/
 https://www.hanasaku.xyz/tags/TraCI/
 https://www.hanasaku.xyz/tags/shp/
