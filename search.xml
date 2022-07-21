@@ -5,8 +5,8 @@
     
     <entry>
       <title>OpenCDA（一）——— 初识</title>
-      <link href="/posts/48548/"/>
-      <url>/posts/48548/</url>
+      <link href="/posts/57889/"/>
+      <url>/posts/57889/</url>
       
         <content type="html"><![CDATA[<h1>1 概述</h1><p>OpenCDA 是一款自动驾驶模拟平台，也是一种仿真软件，目前主要用于自动驾驶领域。与其他的模拟平台不同的是，他可以以多辆车为目标来进行模拟的仿真，就可以在如合作感知、排队、信号灯交叉口的接近和离开这些方面较之其他软件有十分明显的优势。</p><p>这软件是以 sumo 和 carla 为基础的一款软件，简单来说就是用 sumo 生成背景交通流，然后用 carla 来实现以一辆车或者是一个车队为主体的三维仿真。<strong>sumo 来生成车，carla 来渲染！！</strong></p><p>那么作为交通人，我们明显是不是很需要自动驾驶方面的功能的，利用 OpenCDA 可以实现比较精细的微观交通仿真。</p><h1>2 组成部分</h1><p><img src="https://opencda-documentation.readthedocs.io/en/latest/_images/OpenCDA_new_diagrams.png" alt="../_images/OpenCDA_new_diagrams.png"></p><p>官网用这一张图来概括了整个的运作流程。整个系统包括<strong>感知层、规划层、应用层以及驱动层</strong></p><h2 id="2-1-感知层">2.1 感知层</h2><p>感知层主要包括传感器、高清地图以及信号交流单元。（拜托我的英语真的不是很好呜呜呜能看懂就行8）前两者所对应的就是获得相应的<strong>探测、定位以及预测</strong>功能，而信号交流单元则是用来实现 V2X 功能的，显然这是自动驾驶领域的功能，我不了解也是人之常情对吧？对吧？对吧？</p><p>感知层通过一系列的操作，最终是形成了整个协作驾驶系统的输入部分，也不愧对于它的名字。</p><h2 id="2-2-规划层">2.2 规划层</h2><p>这一层的主要目的就是利用感知层所获得的信息来进行路径的规划。规划层的主要有三个阶段：<strong>任务规划→行为规划→轨迹规划</strong>。</p><h2 id="2-3-剩下两层">2.3 剩下两层</h2><p>其实感觉应用层就跟交通没啥关系了，似乎就是协作方面的，主要是编队、合作定位等方面的操作，而最后的驱动层主要是针对转向操作进行的操作，似乎是包括 PID 等控制器。</p><h1>3 模块化</h1><p><strong>模块化</strong>是 OpenCDA 中<em>我个人认为</em>最重要的一个特征。可以看到上面这张图，所有的操作都是一个一个小框，每一个操作都有对应的模块。可以轻易将任一模块里的算法切换为我们自定义的算法，也不会影响其他的模块运行。具体来说，每一个模块都有相对应的 python 文件（就我现在的浅薄了解）可以进行编辑。</p><p>其中最基础的类就是 <code>VehicleManager</code> ，这就是包含所控制（监控？）的车辆的所有的算法的类。其中的类成员<code>LocalizationManager</code> 和 <code>PerceptionManager</code> 就相当于上面所提到的传感器，可以获得车辆的感知信息，包括定位等。<code>BehaviorAgent</code> 对驾驶行为进行规划，<code>LocalPlanner</code> 则用以生成轨迹。产生后的轨迹会传送到 <code>ControlManager</code> 产生转向，制动，加速等控制命令。然后就是<code>V2XManager</code> 会发送或接收由其余<code>CAVs</code>生成的数据包，来进行协同，当然这个功能我们一般是用不上的。</p><p>所以，模块化是及其完整的，十分有利于我们的快速使用和客制化！</p><p><img src="https://opencda-documentation.readthedocs.io/en/latest/_images/class_diagram.png" alt="../_images/class_diagram.png"></p>]]></content>
       
@@ -103,9 +103,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> Detector </tag>
             
@@ -165,9 +165,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> Detector </tag>
             
@@ -225,9 +225,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> TraCI </tag>
             
@@ -258,9 +258,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
@@ -314,9 +314,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
@@ -345,9 +345,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
