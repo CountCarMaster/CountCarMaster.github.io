@@ -74,15 +74,6 @@
   </url>
   
   <url>
-    <loc>https://www.hanasaku.xyz/artitalk/index.html</loc>
-    
-    <lastmod>2022-06-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.hanasaku.xyz/posts/48548/</loc>
     
     <lastmod>2022-06-06</lastmod>
@@ -304,6 +295,13 @@
   </url>
   
   <url>
+    <loc>https://www.hanasaku.xyz/tags/Python/</loc>
+    <lastmod>2022-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.hanasaku.xyz/tags/OpenCDA/</loc>
     <lastmod>2022-10-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -319,13 +317,6 @@
   
   <url>
     <loc>https://www.hanasaku.xyz/tags/carla/</loc>
-    <lastmod>2022-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.hanasaku.xyz/tags/Python/</loc>
     <lastmod>2022-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -507,13 +498,6 @@
   </url>
   
   <url>
-    <loc>https://www.hanasaku.xyz/tags/%E5%BF%AB%E8%AF%BB/</loc>
-    <lastmod>2022-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.hanasaku.xyz/tags/%E6%95%B0%E5%AD%A6/</loc>
     <lastmod>2022-10-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -529,6 +513,13 @@
   
   <url>
     <loc>https://www.hanasaku.xyz/tags/%E7%B4%A0%E6%95%B0/</loc>
+    <lastmod>2022-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.hanasaku.xyz/tags/%E5%BF%AB%E8%AF%BB/</loc>
     <lastmod>2022-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
