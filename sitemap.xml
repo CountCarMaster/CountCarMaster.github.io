@@ -295,13 +295,6 @@
   </url>
   
   <url>
-    <loc>https://www.hanasaku.icu/tags/Python/</loc>
-    <lastmod>2023-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.hanasaku.icu/tags/OpenCDA/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -317,6 +310,13 @@
   
   <url>
     <loc>https://www.hanasaku.icu/tags/carla/</loc>
+    <lastmod>2023-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.hanasaku.icu/tags/Python/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -519,20 +519,6 @@
   </url>
   
   <url>
-    <loc>https://www.hanasaku.icu/tags/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB/</loc>
-    <lastmod>2023-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.hanasaku.icu/tags/%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.hanasaku.icu/tags/%E5%BF%AB%E8%AF%BB/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -541,6 +527,20 @@
   
   <url>
     <loc>https://www.hanasaku.icu/tags/%E6%A0%91/</loc>
+    <lastmod>2023-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.hanasaku.icu/tags/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB/</loc>
+    <lastmod>2023-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.hanasaku.icu/tags/%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2023-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
