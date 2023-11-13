@@ -54,6 +54,35 @@
     
     
     <entry>
+      <title>物体检测</title>
+      <link href="/posts/63896/"/>
+      <url>/posts/63896/</url>
+      
+        <content type="html"><![CDATA[<h1>0 前置知识</h1><p>目前的物体检测，无论是什么算法，一般都由两部分组成：物体的定位和物体的分类。</p><p>深度学习并不是万能的，无论是图像识别还是点云识别，都存在一定的局限性：</p><ul><li>遮挡（图像和点云）。在目标前方有其他物体阻挡就容易识别不到；</li><li>缩放（图像）。拍照时焦距未知，同时在图中也有近大远小的问题；</li><li>分类不平衡（不会翻译，Class imbalance）（图像和点云）。举例来说就是可能对于自动驾驶而言，数据集中车辆的出现次数很多，但可能自行车出现的次数就很少，自行车就很难分类准确；</li><li>旋转（图像和点云）</li><li>泛化（图像和点云）</li><li>光照（图像）。对于图像数据，光照会产生影响，一半在较暗的环境会效果更好；</li><li>缺少纹理（点云）。点云是离散点，并没有纹理信息；</li><li>Sparsity（不会翻译）（点云）。对于点云来说，离雷达较近的物体有很多点，而很远的点可能就只有几个点。</li></ul><h2 id="0-1-物体检测器的评价">0.1 物体检测器的评价</h2><h3 id="0-1-1-IoU">0.1.1 IoU</h3><p>IoU（Intersection over Union），所处理的是predict box和ground truth box（预测值和真实值），计算方式就是两者的交除以两者的并。即<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>o</mi><mi>U</mi><mo>=</mo><mfrac><mrow><mi>A</mi><mi>r</mi><mi>e</mi><mi>a</mi><mtext> </mtext><mi>o</mi><mi>f</mi><mtext> </mtext><mi>O</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>L</mi><mi>a</mi><mi>p</mi></mrow><mrow><mi>A</mi><mi>r</mi><mi>e</mi><mi>a</mi><mtext> </mtext><mi>o</mi><mi>f</mi><mtext> </mtext><mi>U</mi><mi>n</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">IoU = \frac{Area\ of \ OverLap}{Area\ of\ Union}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.4133em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight">a</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">U</span><span class="mord mathnormal mtight">ni</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight">a</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">er</span><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p><h3 id="0-1-2-Precision-and-Recall">0.1.2 Precision and Recall</h3><p>首先要搞清楚四个东西：</p><ul><li>TP（True Positives）：就是预测对了的数量</li><li>FP（False Positives）：识别出来了，但是识别错了的数量</li><li>FN（False Negatives）：这里有东西，但是没识别出来</li><li>TN（True Negatives）：这里没东西，也没识别出来</li></ul><p>那么有了上面的东西，我们就可以计算Precision和Recall了</p><p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>P</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mi>P</mi></mfrac></mrow><annotation encoding="application/x-tex">Precision = \frac{TP}{TP + FP} = \frac{TP}{P}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">rec</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2757em;vertical-align:-0.4033em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">TP</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight" style="margin-right:0.13889em;">FP</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">TP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">P</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">TP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p><p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>e</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>l</mi><mo>=</mo><mfrac><mrow><mi>T</mi><mi>P</mi></mrow><mrow><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">Recall = \frac{TP}{TP + FN}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">ec</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">ll</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2757em;vertical-align:-0.4033em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">TP</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">FN</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">TP</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p><p>这也很好理解，一个用来表示识别结果有多么准确，一个用来表示能识别出多少。</p><h3 id="0-1-3-Average-Precision-AP">0.1.3 Average Precision(AP)</h3><p>这个就是最终评价指标了，其步骤如下：</p><ul><li>选择一个IoU threshold</li><li>选择一个置信度threshold<ul><li>只选择置信度大于threshold的进行分析</li></ul></li><li>判断每一个box是TP还是FP<ul><li>TP：IoU大于threshold &amp;&amp; 是这个物体的predict boxes中IoU最高的</li><li>FP：IoU小于threshold || 并不是IoU最高的（因为每一个ground truth只能对应一个predict box）</li></ul></li><li>计算Precision和Recall</li><li>不断降低置信度threshold，重复2-4步，并绘制P-R曲线（排序之后从大到小）</li><li>就可以通过Area Under Curve（AUC），计算曲线下的面积得到AP</li></ul><p>每一个类别都这么算算，然后取平均值就是mAP</p><p><strong>Precision Interpolated</strong>：一般来说，P-R曲线应该都是下降的或者齐平的，而不能是上升的。但在某些情况下它确实上升了，因此我们要通过Precision Interpolated来进行修正。</p><p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>i</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>r</mi><mi>p</mi></mrow></msub><mo stretchy="false">(</mo><mi>r</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mrow><mi>max</mi><mo>⁡</mo></mrow><mrow><msup><mi>r</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo>≥</mo><mi>r</mi></mrow></msub><mi>p</mi><mo stretchy="false">(</mo><msup><mi>r</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P_{interp}(r) = \max_{r&#x27; \geq r}p(r&#x27;)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">in</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">er</span><span class="mord mathnormal mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0019em;vertical-align:-0.25em;"></span><span class="mop"><span class="mop">max</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mrel mtight">≥</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2452em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p><p>也就是如下图所示，Recall往后如果有precision更大的，那么此时的precision就更新为后面那个更大的。</p><img src="https://badpicturebed.oss-cn-hangzhou.aliyuncs.com/img/image-20231016172025900.png" alt="image-20231016172025900" style="zoom:50%;" /><h2 id="0-2-Non-Maximum-Suppression（NMS）">0.2 Non-Maximum Suppression（NMS）</h2><img src="https://badpicturebed.oss-cn-hangzhou.aliyuncs.com/img/image-20231016172358649.png" alt="image-20231016172358649" style="zoom:50%;" /><p>如上图所示，可能对于一个物体，有好几个predict boxes，此时我们只想要保留一个应该怎么做呢？</p><ul><li>将所有的predict boxes放入input list</li><li>按照置信度排序</li><li>选择置信度最高的，放入output list中，并将其从input list中移除</li><li>对input list中的boxes进行操作<ul><li>每一个都和这个置信度高的比较一下</li><li>如果IoU大于我们所设定的threshold <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow><annotation encoding="application/x-tex">\tau</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.1132em;">τ</span></span></span></span>，那么就将这个box从input list中移除</li></ul></li><li>重复步骤3，4，直至input list为空</li><li>Output list就是最终结果</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 点云 </category>
+          
+          <category> 图像 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 深度学习 </tag>
+            
+            <tag> 目标检测 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>模型拟合</title>
       <link href="/posts/13137/"/>
       <url>/posts/13137/</url>
@@ -257,9 +286,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> cesium </tag>
             
@@ -404,9 +433,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> TraCI </tag>
             
@@ -439,9 +468,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> TraCI </tag>
             
@@ -499,9 +528,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> TraCI </tag>
             
@@ -532,9 +561,9 @@
             
             <tag> Matplotlib </tag>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
@@ -588,9 +617,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
@@ -619,9 +648,9 @@
       
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> sumo </tag>
+            
+            <tag> Python </tag>
             
             <tag> xml </tag>
             
